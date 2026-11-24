@@ -4,6 +4,15 @@
   "description": "Svelte renderer for A2UI (Agent-to-User Interface)",
   "author": "The a2ui-svelte Authors",
   "license": "Apache-2.0",
+  "homepage": "https://github.com/Conalog/a2ui-svelte/tree/main/typescript/renderers/svelte#readme",
+  "repository": {
+    "directory": "typescript/renderers/svelte",
+    "type": "git",
+    "url": "git+https://github.com/Conalog/a2ui-svelte.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Conalog/a2ui-svelte/issues"
+  },
   "keywords": [
     "a2ui",
     "svelte",
