@@ -1,0 +1,59 @@
+{
+  "name": "Svelte Component in the Basic Catalog",
+  "description": "A StatusBadge written in Svelte inside basic catalog containers, bound to the data model.",
+  "messages": [
+    {
+      "version": "1.0",
+      "createSurface": {
+        "surfaceId": "gallery-svelte-status-badge",
+        "catalogId": "https://example.com/a2ui-svelte/demo_catalog.json",
+        "dataModel": {"order": {"id": "A-1042", "status": "Packed", "tone": "neutral"}}
+      }
+    },
+    {
+      "version": "1.0",
+      "updateComponents": {
+        "surfaceId": "gallery-svelte-status-badge",
+        "components": [
+          {"id": "root", "component": "Card", "child": "body"},
+          {"id": "body", "component": "Column", "children": ["title", "status_row", "ship_btn"]},
+          {
+            "id": "title",
+            "component": "Text",
+            "text": {"@call": "formatString", "args": {"value": "## Order ${/order/id}"}}
+          },
+          {
+            "id": "status_row",
+            "component": "Row",
+            "children": ["status_label", "status_badge"],
+            "align": "center"
+          },
+          {"id": "status_label", "component": "Text", "text": "Status", "variant": "caption"},
+          {
+            "id": "status_badge",
+            "component": "StatusBadge",
+            "label": {"@path": "/order/status"},
+            "tone": "neutral"
+          },
+          {
+            "id": "ship_btn",
+            "component": "Button",
+            "child": "ship_btn_text",
+            "action": {
+              "event": {"name": "ship_order", "context": {"orderId": {"@path": "/order/id"}}}
+            }
+          },
+          {"id": "ship_btn_text", "component": "Text", "text": "Mark as shipped"}
+        ]
+      }
+    },
+    {
+      "version": "1.0",
+      "updateDataModel": {
+        "surfaceId": "gallery-svelte-status-badge",
+        "path": "/order/status",
+        "value": "Shipped"
+      }
+    }
+  ]
+}
