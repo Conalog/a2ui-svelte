@@ -26,7 +26,7 @@ The basic catalog itself is not reimplemented. As in the React, Lit and Angular 
 | `svelte`         | `^5.29.0` (peer dependency; `{@attach}` landed in 5.29)                                         |
 | `zod`            | `^3.25.76` (peer dependency, same as `@a2ui/web_core`)                                          |
 | SvelteKit        | optional; the package imports nothing from `$app/*`. The explorer and its tests use SvelteKit 3 |
-| Node.js (tools)  | `>=20.19` for the package, `>=22.17` for the explorer (SvelteKit 3)                             |
+| Node.js          | `>=18` where the package runs (its `engines`); `>=22.17` to develop it                          |
 
 v0.8 is not supported; `web_core` keeps it under a separate legacy API.
 
@@ -226,4 +226,4 @@ The suites and example payloads are copied from the official repository at a pin
 8. (agent, unconfirmed) `@a2ui/web_core`, `svelte` and `zod` are peer dependencies (section 2).
 9. (agent, unconfirmed) No fallbacks until `web_core` supports them in every rendering path (section 13).
 10. (agent, unconfirmed) The workspace uses Yarn 4 through Corepack, as the official repository does.
-11. (agent, unconfirmed) The package's tooling runs on Node.js 20.19 and later. The explorer uses SvelteKit 3, the version current applications use, and needs Node.js 22.17 or later; CI runs Node.js 22 and 24.
+11. (agent, unconfirmed) Development needs Node.js 22.17 or later, declared in the root `package.json`: `@sveltejs/package` needs Node.js 22, and the explorer uses SvelteKit 3, which needs 22.17. The package's own `engines` states where it runs (`>=18`, as in the React renderer), so it does not hold consumers to the development floor. CI runs Node.js 22 and 24.
