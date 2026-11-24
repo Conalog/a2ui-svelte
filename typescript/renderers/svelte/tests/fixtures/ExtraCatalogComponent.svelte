@@ -1,0 +1,38 @@
+<!--
+ Copyright 2026 The a2ui-svelte Authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<!--
+  @component
+  The component the conformance harness registers for each component of an
+  inline custom catalog: it renders the component's text and number props.
+-->
+<script lang="ts">
+  import type {SvelteA2uiComponentProps} from '../../src/index.js';
+
+  let {props, node}: SvelteA2uiComponentProps<Record<string, unknown>> = $props();
+
+  const text = $derived(
+    Object.entries(props)
+      .filter(
+        ([key, value]) =>
+          !key.startsWith('set') && (typeof value === 'string' || typeof value === 'number'),
+      )
+      .map(([, value]) => String(value))
+      .join(' '),
+  );
+</script>
+
+<span data-testid={`custom-${node.type}`}>{text}</span>
