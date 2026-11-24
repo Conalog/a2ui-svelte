@@ -163,7 +163,10 @@ export interface AdapterTestCase {
 }
 
 /** The parts of a rendered surface the harness uses. */
-export type RenderedSurface = Pick<RenderResult<typeof A2uiSurface>, 'container' | 'unmount'>;
+export type RenderedSurface = Pick<
+  RenderResult<typeof A2uiSurface>,
+  'container' | 'rerender' | 'unmount'
+>;
 
 export interface HarnessState {
   processor: MessageProcessor<SvelteCatalogComponent>;
