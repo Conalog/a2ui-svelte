@@ -1,0 +1,25 @@
+node_modules
+.DS_Store
+dist
+.svelte-kit
+build
+coverage
+.env
+.env.*
+!.env.example
+.idea/
+*.tsbuildinfo
+test-results
+playwright-report
+.vitest-attachments
+__screenshots__
+
+# Yarn Modern
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+
+# Local working files that never belong in the repository
+work/
