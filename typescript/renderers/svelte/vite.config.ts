@@ -30,8 +30,17 @@ export default defineConfig({
           name: 'unit',
           environment: 'jsdom',
           include: ['tests/**/*.test.ts'],
-          exclude: ['tests/browser/**'],
+          exclude: ['tests/browser/**', 'tests/ssr/**'],
           setupFiles: ['./tests/setup.ts'],
+        },
+      },
+      {
+        // Plain Node with the server builds of Svelte and Lit, as during SvelteKit SSR.
+        extends: true,
+        test: {
+          name: 'ssr',
+          environment: 'node',
+          include: ['tests/ssr/**/*.test.ts'],
         },
       },
       {

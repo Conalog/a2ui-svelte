@@ -30,8 +30,9 @@
   "sideEffects": false,
   "scripts": {
     "build": "svelte-package --input src --output dist",
-    "test": "yarn typecheck && yarn test:unit && yarn test:browser",
+    "test": "yarn typecheck && yarn test:unit && yarn test:ssr && yarn test:browser",
     "test:unit": "vitest run --project unit",
+    "test:ssr": "vitest run --project ssr",
     "test:browser": "vitest run --project browser",
     "test:watch": "vitest --project unit",
     "typecheck": "svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",
