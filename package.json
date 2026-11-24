@@ -1,0 +1,23 @@
+{
+  "name": "a2ui-svelte-workspace",
+  "private": true,
+  "packageManager": "yarn@4.13.0",
+  "workspaces": [
+    "typescript/renderers/svelte",
+    "typescript/renderers/svelte/a2ui_explorer"
+  ],
+  "scripts": {
+    "build:all": "yarn workspaces foreach -A -p --topological-dev run build",
+    "test:all": "yarn workspaces foreach -A -p --topological-dev run test",
+    "lint:all": "yarn workspaces foreach -A -p --topological-dev run lint",
+    "lint:fix:all": "yarn workspaces foreach -A -p --topological-dev run lint:fix",
+    "format:all": "prettier --write .",
+    "format:check:all": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "^3.8.4",
+    "prettier-plugin-svelte": "^4.2.0",
+    "svelte": "^5.59.1",
+    "typescript": "6.0.3"
+  }
+}
