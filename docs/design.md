@@ -23,7 +23,7 @@ The basic catalog itself is not reimplemented. As in the React, Lit and Angular 
 | ---------------- | ----------------------------------------------------------------------------------------------- |
 | A2UI protocol    | v1.0, plus v0.9 and v0.9.1 surfaces that `web_core` renders                                     |
 | `@a2ui/web_core` | `^0.16.1` (peer dependency)                                                                     |
-| `svelte`         | `^5.29.0` (peer dependency; `{@attach}` landed in 5.29)                                         |
+| `svelte`         | `^5.50.3` (peer dependency; the oldest version CI tests)                                        |
 | `zod`            | `^3.25.76` (peer dependency, same as `@a2ui/web_core`)                                          |
 | SvelteKit        | optional; the package imports nothing from `$app/*`. The explorer and its tests use SvelteKit 3 |
 | Node.js          | `>=18` where the package runs (its `engines`); `>=22.17` to develop it                          |

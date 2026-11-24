@@ -12,7 +12,7 @@ The renderer supports protocol v1.0, and renders v0.9 and v0.9.1 surfaces throug
 npm install @conalog/a2ui-svelte @a2ui/web_core zod
 ```
 
-`@a2ui/web_core` (`^0.16.1`), `svelte` (`^5.29.0`) and `zod` (`^3.25.76`) are peer dependencies, so your application holds one copy of each. The package imports nothing from `$app/*`, so it works in plain Vite projects as well as in SvelteKit.
+`@a2ui/web_core` (`^0.16.1`), `svelte` (`^5.50.3`) and `zod` (`^3.25.76`) are peer dependencies, so your application holds one copy of each. The package imports nothing from `$app/*`, so it works in plain Vite projects as well as in SvelteKit.
 
 ## Render a surface
 
@@ -222,7 +222,7 @@ const allowed = Object.fromEntries(
 | ---------------- | ----------------------- |
 | A2UI protocol    | v1.0, v0.9 and v0.9.1   |
 | `@a2ui/web_core` | `^0.16.1`               |
-| `svelte`         | `^5.29.0`               |
+| `svelte`         | `^5.50.3`               |
 | SvelteKit        | optional; tested with 3 |
 
 v0.8 is not supported.
