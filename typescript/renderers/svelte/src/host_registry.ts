@@ -15,16 +15,15 @@
  */
 
 /**
- * Which elements Svelte rendered, and with which Svelte context.
+ * Which elements Svelte rendered, with their Svelte context and error channel.
  *
  * A universal element (a Lit `Column`, say) renders its own children. When one
  * of them is a Svelte implementation, the element creates its host itself, and
  * the host mounts the Svelte content with the context of the nearest element
  * above it that Svelte rendered. The Svelte content then reads the same
- * context it would read if Svelte had rendered it directly.
+ * context it would read if Svelte had rendered it directly, and its errors
+ * reach the same error boundaries.
  */
-
-import type {ComponentApi, SurfaceModel} from '@a2ui/web_core';
 
 /**
  * Identifies an element that Svelte rendered through `ChildElement`, with the
@@ -34,9 +33,14 @@ export class HostOwner {
   // Nominal: only `new HostOwner()` is one.
   declare private readonly nominal: never;
 
+  /**
+   * @param contexts The Svelte context where `ChildElement` rendered the element.
+   * @param reportError Rethrows an error from content mounted below the element
+   *     inside `ChildElement`, where the application's error boundaries catch it.
+   */
   constructor(
     readonly contexts: Map<unknown, unknown>,
-    public surface?: SurfaceModel<ComponentApi>,
+    readonly reportError: (error: unknown) => void,
   ) {}
 }
 

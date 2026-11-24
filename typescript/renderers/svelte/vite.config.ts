@@ -41,6 +41,8 @@ export default defineConfig({
           name: 'ssr',
           environment: 'node',
           include: ['tests/ssr/**/*.test.ts'],
+          // The first import compiles the package and its dependencies for the server.
+          testTimeout: 30_000,
         },
       },
       {

@@ -160,23 +160,54 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
 
 function ignoreWrite(): void {}
 
-/** The node a `buildChild` argument names among `children`, if any. */
+/**
+ * The node a `buildChild` argument names among `children`, if any.
+ *
+ * A string is a token from view props; failing that, it is read as a component
+ * id at the parent's data scope, as a raw id from the component definition
+ * would be. A `{id, basePath}` reference names the instance of component `id`
+ * at data scope `basePath`. Children exist only at the scopes the payload
+ * implies, so neither form creates an instance.
+ */
 export function resolveChild(
   child: NodeChild,
   children: ChildIndex,
+  parentDataPath: string,
 ): ComponentNode<SvelteCatalogComponent> | undefined {
   if (isComponentNode(child)) {
     return child as ComponentNode<SvelteCatalogComponent>;
   }
-  return children.get(typeof child === 'string' ? child : child.id);
+  if (typeof child === 'string') {
+    return children.get(child) ?? findInstance(children, child, parentDataPath);
+  }
+  return findInstance(children, child.id, child.basePath ?? parentDataPath);
 }
 
-/** The token `buildChild` was given, for diagnostics. */
-export function childToken(child: NodeChild): string {
-  if (isComponentNode(child)) {
-    return child.instanceId;
+function findInstance(
+  children: ChildIndex,
+  componentId: string,
+  dataPath: string,
+): ComponentNode<SvelteCatalogComponent> | undefined {
+  for (const node of children.values()) {
+    if (node.componentId === componentId && node.dataPath === dataPath) {
+      return node;
+    }
   }
-  return typeof child === 'string' ? child : child.id;
+  return undefined;
+}
+
+/** The component id and data scope a `buildChild` argument asked for, for diagnostics. */
+export function describeChild(
+  child: NodeChild,
+  parentDataPath: string,
+): {id: string; requestedPath: string} {
+  if (isComponentNode(child)) {
+    return {id: child.componentId, requestedPath: child.dataPath};
+  }
+  if (typeof child === 'string') {
+    return {id: child, requestedPath: parentDataPath};
+  }
+  return {id: child.id, requestedPath: child.basePath ?? parentDataPath};
 }
 
 /** Unresolved-reference reports already dispatched, per surface. */

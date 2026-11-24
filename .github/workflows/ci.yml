@@ -68,6 +68,30 @@ jobs:
       - name: Build and check the published package
         run: yarn lint:package
 
+  svelte-floor:
+    name: Package (Svelte 5.50.3)
+    runs-on: ubuntu-24.04 # Playwright has no Chromium build for Ubuntu 26.04 yet
+    defaults:
+      run:
+        working-directory: typescript/renderers/svelte
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: corepack enable
+      - name: Pin Svelte to the lowest version the peer range allows
+        working-directory: .
+        run: |
+          npm pkg set resolutions.svelte=5.50.3
+          YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install
+          node -e "const v = require('svelte/package.json').version; if (v !== '5.50.3') throw new Error('svelte ' + v)"
+      - run: yarn typecheck
+      - run: yarn test:unit
+      - run: yarn test:ssr
+      - run: yarn playwright install --with-deps chromium
+      - run: yarn test:browser
+
   explorer:
     name: Explorer end to end
     runs-on: ubuntu-24.04 # Playwright has no Chromium build for Ubuntu 26.04 yet

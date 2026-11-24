@@ -66,7 +66,15 @@
     return undefined;
   });
 
-  let root = $state.raw<ComponentNode<SvelteCatalogComponent> | undefined>();
+  // The resolved root, with the surface it belongs to. When the surface prop
+  // changes, the template re-renders before the effect below tears down the old
+  // resolver; pairing the two keeps the old root from rendering under the new
+  // surface in between.
+  let resolved = $state.raw<{
+    surface: SurfaceModel<SvelteCatalogComponent>;
+    root: ComponentNode<SvelteCatalogComponent> | undefined;
+  }>();
+  const root = $derived(resolved?.surface === surface ? resolved.root : undefined);
 
   // The resolver lives in an effect, so it exists only in the browser and only
   // while the surface is shown. A new surface disposes the old resolver.
@@ -78,13 +86,13 @@
     });
     const resolver = new NodeResolver(current, current.defaultCatalog);
     const stopRoot = signalEffect(() => {
-      root = getValue(resolver.rootNode);
+      resolved = {surface: current, root: getValue(resolver.rootNode)};
     });
     return () => {
       stopRoot();
       created.unsubscribe();
       resolver.dispose();
-      root = undefined;
+      resolved = undefined;
     };
   });
 </script>

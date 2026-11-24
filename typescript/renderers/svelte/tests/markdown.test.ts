@@ -70,6 +70,16 @@ describe('Markdown in the basic catalog Text', () => {
     expect(view.closest('a2ui-svelte-markdown')).not.toBeNull();
   });
 
+  it('renders new Markdown when the host is given it', async () => {
+    const {getByTestId, container} = render(SurfaceWithContext, {
+      props: {surface: textSurface(), markdownComponent: MarkdownView},
+    });
+    await waitFor(() => getByTestId('markdown-view'));
+
+    container.querySelector('a2ui-svelte-markdown')!.setAttribute('data-markdown', 'Changed');
+    await waitFor(() => expect(getByTestId('markdown-view').textContent).toBe('Changed'));
+  });
+
   it('gives back the previous renderer when the last surface with a component unmounts', async () => {
     const previous = async (markdown: string) => markdown;
     setMarkdownRenderer(previous);

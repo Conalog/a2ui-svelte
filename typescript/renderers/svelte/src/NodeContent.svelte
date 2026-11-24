@@ -25,7 +25,7 @@
   import {hostRefsOf} from './catalog/host_accessibility.js';
   import ChildElement from './ChildElement.svelte';
   import {
-    childToken,
+    describeChild,
     fromSignal,
     getA2uiSurface,
     resolveChild,
@@ -53,11 +53,12 @@
 </script>
 
 {#snippet buildChild(child: NodeChild)}
-  {@const childNode = resolveChild(child, view.children)}
+  {@const childNode = resolveChild(child, view.children, node.dataPath)}
   {#if childNode}
     <ChildElement node={childNode} />
   {:else if surface}
-    <UnresolvedChildReference {surface} id={childToken(child)} requestedPath={node.dataPath} />
+    {@const requested = describeChild(child, node.dataPath)}
+    <UnresolvedChildReference {surface} id={requested.id} requestedPath={requested.requestedPath} />
   {/if}
 {/snippet}
 
