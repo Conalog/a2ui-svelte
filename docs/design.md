@@ -2,7 +2,7 @@
 
 This document describes how `@conalog/a2ui-svelte` renders A2UI surfaces with Svelte 5. It follows the [framework adapter blueprint](https://github.com/a2ui-project/a2ui/blob/main/blueprints/modules/a2ui_framework_adapter.blueprint.md) and the [universal custom elements feature blueprint](https://github.com/a2ui-project/a2ui/blob/main/blueprints/features/universal_custom_elements.blueprint.md) of the official A2UI repository, and mirrors the layout of the official React renderer (`typescript/renderers/react`) so that the package can move into the official repository as `typescript/renderers/svelte` (`@a2ui/svelte`) without restructuring.
 
-Each decision at the end of this document records who made it. A decision marked "unconfirmed" was made by the agent that wrote the first version and has not been reviewed by a maintainer yet.
+Each decision at the end of this document records who made it. Decisions marked "agent" were made by the agent that wrote the first version; on 2026-11-25 a second, independent agent checked each of them against the official blueprints and the code, the defects it found were fixed, and the user confirmed the decisions.
 
 ## 1. Scope
 
@@ -220,10 +220,10 @@ The suites and example payloads are copied from the official repository at a pin
 2. (user) Structure, file names, public identifiers and test layout follow the official React and Lit renderers, so the package can move to `typescript/renderers/svelte`.
 3. (user) Documentation and commits follow the official repository's standards: the natural-writing rules, Conventional Commits with a scope, and `CHANGELOG.md` entries under `## Unreleased`. Documentation and commit messages are in English, as upstream. [CONTRIBUTING.md](../CONTRIBUTING.md#where-these-conventions-come-from) names the official file or commit each convention comes from.
 4. (user) License Apache-2.0; copyright line "The a2ui-svelte Authors" with an `AUTHORS` file; npm package name `@conalog/a2ui-svelte`.
-5. (agent, unconfirmed) The basic catalog comes from `web_core`'s universal elements rather than a Svelte reimplementation, as the universal custom elements blueprint asks of web renderers.
-6. (agent, unconfirmed) Child tokens are `instanceId` instead of `node.id` (section 4).
-7. (agent, unconfirmed) Svelte content inside a universal element is mounted by its host with a copy of the owner's context, and its errors are rethrown in the owner, instead of being portaled (section 4).
-8. (agent, unconfirmed) `@a2ui/web_core`, `svelte` and `zod` are peer dependencies (section 2).
-9. (agent, unconfirmed) No fallbacks until `web_core` supports them in every rendering path (section 13).
-10. (agent, unconfirmed) The workspace uses Yarn 4 through Corepack, as the official repository does.
-11. (agent, unconfirmed) Development needs Node.js 22.17 or later, declared in the root `package.json`: `@sveltejs/package` needs Node.js 22, and the explorer uses SvelteKit 3, which needs 22.17. The package's own `engines` states where it runs (`>=18`, as in the React renderer), so it does not hold consumers to the development floor. CI runs Node.js 22 and 24.
+5. (agent, confirmed by the user) The basic catalog comes from `web_core`'s universal elements rather than a Svelte reimplementation, as the universal custom elements blueprint asks of web renderers.
+6. (agent, confirmed by the user) Child tokens are `instanceId` instead of `node.id` (section 4).
+7. (agent, confirmed by the user) Svelte content inside a universal element is mounted by its host with a copy of the owner's context, and its errors are rethrown in the owner, instead of being portaled (section 4).
+8. (agent, confirmed by the user) `@a2ui/web_core`, `svelte` and `zod` are peer dependencies (section 2). The Svelte range starts at 5.50.3, the oldest version CI tests and the first that passes `$effect` errors to error boundaries.
+9. (agent, confirmed by the user) No fallbacks until `web_core` supports them in every rendering path (section 13).
+10. (agent, confirmed by the user) The workspace uses Yarn 4 through Corepack, as the official repository does.
+11. (agent, confirmed by the user) Development needs Node.js 22.17 or later, declared in the root `package.json`: `@sveltejs/package` needs Node.js 22, and the explorer uses SvelteKit 3, which needs 22.17. The package's own `engines` states where it runs (`>=18`, as in the React renderer), so it does not hold consumers to the development floor. CI runs Node.js 22 and 24.
