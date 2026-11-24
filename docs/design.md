@@ -218,7 +218,7 @@ The suites and example payloads are copied from the official repository at a pin
 
 1. (user) The package is built on the official `@a2ui/web_core`, as an independent repository named `a2ui-svelte`.
 2. (user) Structure, file names, public identifiers and test layout follow the official React and Lit renderers, so the package can move to `typescript/renderers/svelte`.
-3. (user) Documentation and commits follow the official repository's standards: the natural-writing rules, Conventional Commits with a scope, and `CHANGELOG.md` entries under `## Unreleased`.
+3. (user) Documentation and commits follow the official repository's standards: the natural-writing rules, Conventional Commits with a scope, and `CHANGELOG.md` entries under `## Unreleased`. Documentation and commit messages are in English, as upstream. [CONTRIBUTING.md](../CONTRIBUTING.md#where-these-conventions-come-from) names the official file or commit each convention comes from.
 4. (user) License Apache-2.0; copyright line "The a2ui-svelte Authors" with an `AUTHORS` file; npm package name `@conalog/a2ui-svelte`.
 5. (agent, unconfirmed) The basic catalog comes from `web_core`'s universal elements rather than a Svelte reimplementation, as the universal custom elements blueprint asks of web renderers.
 6. (agent, unconfirmed) Child tokens are `instanceId` instead of `node.id` (section 4).

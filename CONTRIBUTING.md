@@ -93,6 +93,25 @@ A change to the package's public API or to behavior a consumer can observe adds 
 3. End the entry with a link to the pull request.
 4. Leave out internal changes, test-only changes and changes to the explorer.
 
+## Where these conventions come from
+
+Each convention above was taken from the official repository at commit [`1dbe86a94257`](https://github.com/a2ui-project/a2ui/tree/1dbe86a942579cc83a1d657213f0db3b881632ae) (2026-11-24):
+
+1. Commit messages: the repository's history, for example `fix(rpc): enforce agent caller boundary on nested callRendererFunction arguments (#4336)` and `feat(core): let a MessageProcessor take a catalog after it is built (#3304)`. Upstream subjects end with the pull request number, which the squash merge adds; commits made before this repository had pull requests have none.
+2. Pull request scope and comments: `.agents/skills/pr-hygiene/SKILL.md`.
+3. Changelog entries: `.agents/skills/update-changelog/SKILL.md`, and `typescript/renderers/react/CHANGELOG.md` for examples.
+4. Documentation wording and version labels: `.agents/skills/natural-writing/SKILL.md` and section 2 of `AGENTS.md`.
+5. Code style and formatting: `CONTRIBUTING.md` (Google TypeScript Style Guide), `.prettierrc`, and `eslint.preset.mjs` (`gts`).
+6. License header: the header of every file under `typescript/renderers/react/src/`, with this project's copyright line.
+7. Package layout, file names and public names: `typescript/renderers/react/src/` and `typescript/renderers/react/package.json`.
+8. Public API doc comments: the JSDoc in `typescript/renderers/react/src/` and `typescript/core/web_core/src/universal/`.
+9. Conformance harness: `typescript/renderers/react/tests/adapter_harness.tsx`, `adapter_conformance.test.tsx` and `e2e_scenarios.test.tsx`, and `conformance/conformance_harness_implementation_guide.md`.
+10. Design and codebase records: `blueprints/modules/a2ui_framework_adapter.blueprint.md` and `blueprints/codebases/typescript/renderers/react/codebase.blueprint.md`.
+11. Explorer: `typescript/renderers/react/a2ui_explorer/` and section 9 (Gallery App) of the framework adapter blueprint.
+12. Package README content: `docs/site/src/content/docs/guides/client-integration.mdx`.
+
+When the official repository changes one of these, update this list along with the convention.
+
 ## Reporting security issues
 
 See [SECURITY.md](SECURITY.md). Do not open a public issue for a vulnerability.
