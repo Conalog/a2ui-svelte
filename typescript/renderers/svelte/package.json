@@ -1,0 +1,88 @@
+{
+  "name": "@conalog/a2ui-svelte",
+  "version": "0.1.0",
+  "description": "Svelte renderer for A2UI (Agent-to-User Interface)",
+  "author": "The a2ui-svelte Authors",
+  "license": "Apache-2.0",
+  "keywords": [
+    "a2ui",
+    "svelte",
+    "ai",
+    "agent",
+    "ui",
+    "renderer"
+  ],
+  "type": "module",
+  "svelte": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "svelte": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "!dist/**/*.test.*"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "svelte-package --input src --output dist",
+    "test": "yarn typecheck && yarn test:unit && yarn test:browser",
+    "test:unit": "vitest run --project unit",
+    "test:browser": "vitest run --project browser",
+    "test:watch": "vitest --project unit",
+    "typecheck": "svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint:package": "yarn build && publint --strict",
+    "format": "prettier --ignore-path ../../../.prettierignore --write .",
+    "format:check": "prettier --ignore-path ../../../.prettierignore --check .",
+    "clean": "rm -rf dist .svelte-kit coverage"
+  },
+  "peerDependencies": {
+    "@a2ui/web_core": "^0.16.1",
+    "svelte": "^5.29.0",
+    "zod": "^3.25.76"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@a2ui/web_core": "^0.16.1",
+    "@eslint/js": "^10.0.1",
+    "@sveltejs/package": "^3.0.3",
+    "@sveltejs/vite-plugin-svelte": "^7.3.2",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/svelte": "^5.4.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.0.0",
+    "@vitest/browser-playwright": "^4.1.12",
+    "axe-core": "^4.14.1",
+    "eslint": "^10.4.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-svelte": "^3.24.1",
+    "globals": "^17.6.0",
+    "gts": "^7.0.0",
+    "js-yaml": "^4.1.0",
+    "jsdom": "^29.1.1",
+    "playwright": "1.58.1",
+    "prettier": "^3.8.4",
+    "prettier-plugin-svelte": "^4.2.0",
+    "publint": "^0.3.25",
+    "svelte": "^5.59.1",
+    "svelte-check": "^4.7.8",
+    "typescript": "6.0.3",
+    "typescript-eslint": "^8.74.0",
+    "vite": "^8.3.8",
+    "vitest": "^4.1.12",
+    "zod": "^3.25.76"
+  }
+}
