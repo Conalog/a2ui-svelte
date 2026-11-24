@@ -29,6 +29,12 @@ const VIEW_BOUNDARY = {
     'Adapter views must read ComponentNode.props instead of importing ComponentContext, GenericBinder, or DataContext.',
 };
 
+/** The package must work in plain Vite projects, without SvelteKit's modules. */
+const SVELTEKIT_ONLY = {
+  group: ['$app/*', '$env/*', '$service-worker'],
+  message: 'The package must not depend on SvelteKit; it runs in plain Svelte and Vite projects.',
+};
+
 const SELF_IMPORT = {
   group: ['@conalog/a2ui-svelte', '@conalog/a2ui-svelte/*'],
   message: 'Use relative imports within the package instead of self-importing it.',
@@ -108,7 +114,10 @@ export default tseslint.config(
   {
     files: ['src/**/*.{ts,svelte}'],
     rules: {
-      'no-restricted-imports': ['error', {paths: [VIEW_BOUNDARY], patterns: [SELF_IMPORT]}],
+      'no-restricted-imports': [
+        'error',
+        {paths: [VIEW_BOUNDARY], patterns: [SELF_IMPORT, SVELTEKIT_ONLY]},
+      ],
       'no-restricted-syntax': [
         'error',
         {
