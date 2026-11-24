@@ -62,7 +62,13 @@ function main() {
     fs.rmSync(to, {recursive: true, force: true});
     fs.mkdirSync(path.dirname(to), {recursive: true});
     fs.cpSync(from, to, {recursive: true});
-    copied.push(...listFiles(to).map(file => path.relative(REPO_ROOT, file).replaceAll('\\', '/')));
+    const files = listFiles(to);
+    // A Windows checkout may have CRLF line endings; the repository stores LF.
+    for (const file of files) {
+      const text = fs.readFileSync(file, 'utf8');
+      if (text.includes('\r\n')) fs.writeFileSync(file, text.replaceAll('\r\n', '\n'));
+    }
+    copied.push(...files.map(file => path.relative(REPO_ROOT, file).replaceAll('\\', '/')));
   }
 
   writeManifest(commit, commitDate, copied.sort());
