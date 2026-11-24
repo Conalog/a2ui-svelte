@@ -20,11 +20,8 @@
  * against `A2uiSurface`. It is a port of the React renderer's harness
  * (`typescript/renderers/react/tests/adapter_harness.tsx` upstream): the step runner, the
  * assertions and the skip list behave the same, and only mounting and event dispatch use Svelte's
- * testing library.
+ * testing library. It imports nothing from Node, so the browser tests run it too.
  */
-
-import * as fs from 'node:fs';
-import * as path from 'node:path';
 
 import {act, fireEvent, render, type RenderResult} from '@testing-library/svelte';
 import {expect} from 'vitest';
@@ -501,25 +498,6 @@ export function assertAllUnsupportedMatched(
     unused,
     `Unused UNSUPPORTED entries did not match any executed case: ${unused.join(', ')}`,
   ).toEqual([]);
-}
-
-export function writeManifestRecord(rec: ManifestRecord): void {
-  const manifestDir = process.env.A2UI_CONFORMANCE_MANIFEST_DIR;
-  if (!manifestDir) {
-    return;
-  }
-  fs.mkdirSync(manifestDir, {recursive: true});
-  const filePath = path.join(manifestDir, `${rec.harness}-${process.pid}.jsonl`);
-  const payload: Record<string, string> = {
-    harness: rec.harness,
-    suite: rec.suite.replaceAll('\\', '/'),
-    case: rec.case,
-    status: rec.status,
-  };
-  if (rec.reason) {
-    payload.reason = rec.reason;
-  }
-  fs.appendFileSync(filePath, `${JSON.stringify(payload)}\n`, 'utf8');
 }
 
 export function createDefaultAdapterCatalog(

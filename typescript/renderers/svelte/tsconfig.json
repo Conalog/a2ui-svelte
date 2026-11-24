@@ -13,7 +13,12 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
-    "types": ["node", "@testing-library/jest-dom/vitest", "@vitest/browser-playwright"]
+    "types": [
+      "node",
+      "vite/client",
+      "@testing-library/jest-dom/vitest",
+      "@vitest/browser-playwright"
+    ]
   },
   "include": ["src/**/*", "tests/**/*", "vite.config.ts", "svelte.config.js"],
   "exclude": ["node_modules", "dist"]

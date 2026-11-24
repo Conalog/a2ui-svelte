@@ -36,6 +36,8 @@ export default defineConfig({
       },
       {
         extends: true,
+        plugins: [svelteTesting()],
+        resolve: {conditions: ['browser']},
         test: {
           name: 'browser',
           include: ['tests/browser/**/*.test.ts'],
@@ -43,6 +45,7 @@ export default defineConfig({
           browser: {
             enabled: true,
             headless: true,
+            screenshotFailures: false,
             provider: playwright(),
             instances: [{browser: 'chromium'}],
           },

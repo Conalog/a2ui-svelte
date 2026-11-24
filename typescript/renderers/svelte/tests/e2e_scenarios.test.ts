@@ -36,7 +36,6 @@ import {
   mountSurface,
   runStep,
   settleSurfaceDom,
-  writeManifestRecord,
   type AdapterStep,
   type ExpectedErrorEntry,
   type ExpectedViewNode,
@@ -44,6 +43,7 @@ import {
   type HarnessState,
   type ManifestRecord,
 } from './adapter_harness.js';
+import {writeManifestRecord} from './manifest.js';
 
 /** The official suites, found by walking up from this file, as in `adapter_conformance.test.ts`. */
 function findConformanceRoot(): string {

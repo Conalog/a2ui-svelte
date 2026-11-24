@@ -16,7 +16,9 @@
 
 /** @type {import('@sveltejs/vite-plugin-svelte').SvelteConfig} */
 export default {
-  compilerOptions: {
-    runes: true,
+  vitePlugin: {
+    // Runes mode for this package's own components; dependencies keep their own mode.
+    dynamicCompileOptions: ({filename}) =>
+      filename.includes('node_modules') ? undefined : {runes: true},
   },
 };

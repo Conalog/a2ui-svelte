@@ -34,13 +34,13 @@ import {
   mountSurface,
   runStep,
   settleSurfaceDom,
-  writeManifestRecord,
   type AccessibilityStep,
   type AccessibilityTestCase,
   type AdapterTestCase,
   type ManifestRecord,
   type RenderedSurface,
 } from './adapter_harness.js';
+import {writeManifestRecord} from './manifest.js';
 
 /**
  * The official suites, found by walking up from this file: `conformance/` sits at the
