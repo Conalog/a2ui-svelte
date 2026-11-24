@@ -122,7 +122,9 @@ A form control writes through the setter and calls actions straight from the eve
 <button onclick={() => props.action?.()}>{props.label}</button>
 ```
 
-Svelte components and basic catalog elements nest in either order. A Svelte component inside a basic catalog `Column` still reads your application's Svelte context.
+Svelte components and basic catalog elements nest in either order. A Svelte component inside a basic catalog `Column` still reads your application's Svelte context, and a `<svelte:boundary>` around `A2uiSurface` catches its errors.
+
+A child token stays the same while the node behind it changes, for example when a pending component arrives or a list is reordered. The component keeps its state and receives the new `node` and `props`; it is recreated only when the component's type changes.
 
 Only a component whose data changed re-renders. Typing into an input keeps its element, focus and caret while each keystroke goes through the data model and back.
 

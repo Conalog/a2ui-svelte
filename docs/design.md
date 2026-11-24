@@ -12,7 +12,7 @@ The package provides:
 
 1. `A2uiSurface`, the Svelte component that renders one surface.
 2. `createComponentImplementation`, which turns a Svelte component into a catalog entry, so an application can register its own components next to the basic catalog.
-3. The host elements, host registry and catalog preparation that let Svelte components and the shared basic catalog elements nest in either order.
+3. The host elements and catalog preparation that let Svelte components and the shared basic catalog elements nest in either order.
 4. Markdown context for the basic catalog `Text` component and for custom components.
 
 The basic catalog itself is not reimplemented. As in the React, Lit and Angular renderers, it comes from `@a2ui/web_core/catalogs/basic/v1` as universal custom elements, and the Svelte renderer registers those entries.
@@ -47,7 +47,7 @@ a2ui-svelte/
 │   │   ├── adapter.ts                  # createComponentImplementation
 │   │   ├── svelte_component_implementation.ts  # catalog entry and prop types
 │   │   ├── node-view.svelte.ts         # fromSignal, view props, surface context
-│   │   ├── host_registry.ts            # owners and hosts per surface
+│   │   ├── host_registry.ts            # which elements Svelte rendered, and their context
 │   │   ├── markdown-context.ts
 │   │   ├── markdown_hosts.ts           # Markdown rendered by a Svelte component
 │   │   └── catalog/
@@ -84,7 +84,7 @@ graph TD
 1. `A2uiSurface` takes a `SurfaceModel`. In a client-side effect it prepares the surface's catalogs, creates one `NodeResolver`, and tracks `resolver.rootNode`. When the surface prop changes it disposes the old resolver and creates a new one; when the component unmounts it disposes the resolver. During server-side rendering no effect runs, so the surface renders nothing and creates no resolver.
 2. `ChildElement` renders one `ComponentNode`. A node that is not `resolved` (`pending`, `unknown-type`, `cyclic`) renders nothing and takes no layout space; the resolver has already reported unknown types and cycles to the surface. A resolved node renders its implementation's custom element with `<svelte:element this={tagName}>` and assigns `node` to it. The element is reused while the tag name stays the same and recreated when it changes, which is the reuse rule of the universal custom elements blueprint.
 3. For a Svelte implementation the element is a host element, and `ChildElement` renders `NodeContent` as its children. `NodeContent` subscribes to `node.props`, converts the resolved props to view props (section 5), and renders the implementation's component with `props`, `buildChild`, `node`, `metadata`, `accessibilityRef` and `validationErrorsRef`.
-4. A universal element renders its own children. When one of them is a Svelte implementation, the universal element creates the host element itself. The host finds the nearest element above it that Svelte rendered, and mounts `NodeContent` into itself with that element's Svelte context (captured with `getAllContexts()`). The Svelte content therefore reads the same context as it would without the universal element in between. DOM events bubble through the real DOM as usual. A `<svelte:boundary>` above the universal element does not catch errors from content mounted this way, because `mount` starts a new root; this is a known difference from the React renderer, which uses portals.
+4. A universal element renders its own children. When one of them is a Svelte implementation, the universal element creates the host element itself. The host finds the nearest element above it that Svelte rendered (its owner), and mounts `HostedContent`, which wraps `NodeContent`, into itself with a copy of the owner's Svelte context (captured with `getAllContexts()`). The Svelte content therefore reads the same context as it would without the universal element in between. DOM events bubble through the real DOM as usual. `mount` starts a separate Svelte root, so `HostedContent` catches errors from the content in its own `<svelte:boundary>` and hands them to the owner's `ChildElement`, which rethrows them in an effect; the application's boundaries then catch them as they catch errors from content Svelte rendered directly. The React renderer gets the same effect from portals. Mounting keeps the content's DOM inside the host, where Svelte's own bookkeeping expects it, which a portal that moves rendered nodes would not.
 
 ### Child references and identity
 
@@ -98,7 +98,7 @@ Core resolves child references into `ComponentNode`s. View props replace each ch
 
 The token is `instanceId` because Svelte keys a list at the `{#each}` block, not at the element `buildChild` returns. `instanceId` is unique among one parent's children, follows its component through a reorder of an explicit child list, stays with its index in a template, and survives a placeholder being replaced by the component that arrived. The React renderer uses `node.id` as the token because React keys the element; `node.id` changes whenever core replaces the node object, so the Svelte renderer would remount views that should stay.
 
-When the node behind a token changes type, the tag name changes, and Svelte recreates the element and the implementation component. That resets view state, as the blueprint requires.
+The node behind a token can change while the token stays: when a pending component arrives, when an explicit child list is reordered, and when the component's definition is replaced. As long as the type stays the same, the element and the implementation component stay too, and receive the new `node` and `props`, so view state such as focus survives. When the node behind a token changes type, the tag name changes, and Svelte recreates the element and the implementation component. That resets view state, as the blueprint requires.
 
 ## 5. Reactivity bridge
 
@@ -222,7 +222,7 @@ The suites and example payloads are copied from the official repository at a pin
 4. (user) License Apache-2.0; copyright line "The a2ui-svelte Authors" with an `AUTHORS` file; npm package name `@conalog/a2ui-svelte`.
 5. (agent, unconfirmed) The basic catalog comes from `web_core`'s universal elements rather than a Svelte reimplementation, as the universal custom elements blueprint asks of web renderers.
 6. (agent, unconfirmed) Child tokens are `instanceId` instead of `node.id` (section 4).
-7. (agent, unconfirmed) Svelte content inside a universal element is mounted with the owner's context instead of portaled, because Svelte has no portal; error boundaries do not cross that point (section 4).
+7. (agent, unconfirmed) Svelte content inside a universal element is mounted by its host with a copy of the owner's context, and its errors are rethrown in the owner, instead of being portaled (section 4).
 8. (agent, unconfirmed) `@a2ui/web_core`, `svelte` and `zod` are peer dependencies (section 2).
 9. (agent, unconfirmed) No fallbacks until `web_core` supports them in every rendering path (section 13).
 10. (agent, unconfirmed) The workspace uses Yarn 4 through Corepack, as the official repository does.
