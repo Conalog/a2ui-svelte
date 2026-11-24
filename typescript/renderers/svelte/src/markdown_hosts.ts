@@ -29,7 +29,7 @@
 import {type Component, mount, unmount} from 'svelte';
 import type {MarkdownRenderer} from '@a2ui/web_core';
 import {getMarkdownRenderer, setMarkdownRenderer} from '@a2ui/web_core/universal';
-import {ownerAbove} from './host_registry.js';
+import {type HostOwner, ownerAbove} from './host_registry.js';
 import {MARKDOWN_COMPONENT_KEY, type MarkdownComponentProps} from './markdown-context.js';
 
 const TAG = 'a2ui-svelte-markdown';
@@ -44,30 +44,69 @@ function defineMarkdownHost(): void {
   customElements.define(
     TAG,
     class extends HTMLElement {
-      private instance?: Record<string, unknown>;
+      static observedAttributes = [ATTRIBUTE];
+
+      private mounted?: {
+        readonly instance: Record<string, unknown>;
+        readonly owner: HostOwner;
+        readonly component: Component<MarkdownComponentProps>;
+        readonly markdown: string;
+      };
 
       connectedCallback() {
         this.style.display = 'contents';
-        if (this.instance) return;
-        const owner = ownerAbove(this);
-        const component = owner?.contexts.get(MARKDOWN_COMPONENT_KEY) as
-          Component<MarkdownComponentProps> | undefined;
-        if (!owner || !component) return;
-        this.instance = mount(component, {
-          target: this,
-          props: {markdown: this.getAttribute(ATTRIBUTE) ?? ''},
-          context: owner.contexts,
-        });
+        this.sync();
+      }
+
+      attributeChangedCallback() {
+        if (this.isConnected) this.sync();
       }
 
       disconnectedCallback() {
         // Deferred, so re-parenting keeps the component and its state.
         queueMicrotask(() => {
-          if (!this.isConnected && this.instance) {
-            void unmount(this.instance);
-            this.instance = undefined;
-          }
+          if (!this.isConnected) this.release();
         });
+      }
+
+      /**
+       * Mounts the component for the current owner and Markdown. A move under
+       * another owner, a different component, or new Markdown mounts it anew.
+       */
+      private sync() {
+        const owner = ownerAbove(this);
+        const component = owner?.contexts.get(MARKDOWN_COMPONENT_KEY) as
+          Component<MarkdownComponentProps> | undefined;
+        const markdown = this.getAttribute(ATTRIBUTE) ?? '';
+        const current = this.mounted;
+        if (
+          current &&
+          current.owner === owner &&
+          current.component === component &&
+          current.markdown === markdown
+        ) {
+          return;
+        }
+        this.release();
+        if (!owner || !component) return;
+        this.mounted = {
+          // A copy, so a context the component sets never reaches the owner.
+          instance: mount(component, {
+            target: this,
+            props: {markdown},
+            context: new Map(owner.contexts),
+          }),
+          owner,
+          component,
+          markdown,
+        };
+      }
+
+      private release() {
+        if (this.mounted) {
+          void unmount(this.mounted.instance);
+          this.mounted = undefined;
+        }
       }
     },
   );
