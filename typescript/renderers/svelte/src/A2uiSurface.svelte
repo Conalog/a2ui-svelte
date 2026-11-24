@@ -38,7 +38,8 @@
   import {setMarkdownRenderer} from '@a2ui/web_core/universal';
   import {prepareCatalogs} from './catalog/prepare_catalogs.js';
   import ChildElement from './ChildElement.svelte';
-  import {getMarkdownContext} from './markdown-context.js';
+  import {getMarkdownComponentContext, getMarkdownContext} from './markdown-context.js';
+  import {registerMarkdownHostRenderer} from './markdown_hosts.js';
   import {setSurfaceContext} from './node-view.svelte.js';
   import type {SvelteCatalogComponent} from './svelte_component_implementation.js';
 
@@ -49,12 +50,20 @@
   // web_core's basic catalog reads its Markdown renderer from a module-level
   // slot. Setting it before the effects below lets every element in the
   // surface find it on its first update. A surface without a renderer leaves
-  // the slot alone, so one the application set itself stays in effect.
+  // the slot alone, so one the application set itself stays in effect. A
+  // Markdown component takes precedence: its renderer returns hosts that mount
+  // the component (see `markdown_hosts.ts`), and it leaves the slot when the
+  // last surface using it unmounts.
   const markdownRenderer = getMarkdownContext();
+  const hasMarkdownComponent = getMarkdownComponentContext() !== undefined;
   $effect.pre(() => {
+    if (hasMarkdownComponent) {
+      return registerMarkdownHostRenderer();
+    }
     if (markdownRenderer) {
       setMarkdownRenderer(markdownRenderer);
     }
+    return undefined;
   });
 
   let root = $state.raw<ComponentNode<SvelteCatalogComponent> | undefined>();

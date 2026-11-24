@@ -17,7 +17,13 @@
 export {default as A2uiSurface} from './A2uiSurface.svelte';
 export {createComponentImplementation} from './adapter.js';
 export {fromSignal, getA2uiSurface} from './node-view.svelte.js';
-export {getMarkdownContext, setMarkdownContext} from './markdown-context.js';
+export {
+  getMarkdownComponentContext,
+  getMarkdownContext,
+  type MarkdownComponentProps,
+  setMarkdownComponentContext,
+  setMarkdownContext,
+} from './markdown-context.js';
 export type {
   NodeBuildChild,
   NodeChild,

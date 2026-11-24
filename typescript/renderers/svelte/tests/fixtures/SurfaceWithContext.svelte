@@ -15,17 +15,32 @@
 -->
 
 <script lang="ts">
-  import {setContext} from 'svelte';
-  import type {SurfaceModel} from '@a2ui/web_core';
-  import {A2uiSurface, type SvelteCatalogComponent} from '../../src/index.js';
+  import {type Component, setContext} from 'svelte';
+  import type {MarkdownRenderer, SurfaceModel} from '@a2ui/web_core';
+  import {
+    A2uiSurface,
+    type MarkdownComponentProps,
+    setMarkdownComponentContext,
+    setMarkdownContext,
+    type SvelteCatalogComponent,
+  } from '../../src/index.js';
 
   let {
     surface,
     contexts = {},
+    markdownRenderer,
+    markdownComponent,
   }: {
     surface: SurfaceModel<SvelteCatalogComponent>;
     contexts?: Record<string, unknown>;
+    markdownRenderer?: MarkdownRenderer;
+    markdownComponent?: Component<MarkdownComponentProps>;
   } = $props();
+
+  // svelte-ignore state_referenced_locally
+  setMarkdownContext(markdownRenderer);
+  // svelte-ignore state_referenced_locally
+  setMarkdownComponentContext(markdownComponent);
 
   // The fixture sets its contexts once, as a real app does while it initializes.
   // svelte-ignore state_referenced_locally

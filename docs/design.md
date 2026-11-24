@@ -49,10 +49,11 @@ a2ui-svelte/
 │   │   ├── node-view.svelte.ts         # fromSignal, view props, surface context
 │   │   ├── host_registry.ts            # owners and hosts per surface
 │   │   ├── markdown-context.ts
+│   │   ├── markdown_hosts.ts           # Markdown rendered by a Svelte component
 │   │   └── catalog/
 │   │       ├── host_accessibility.ts
 │   │       ├── prepare_catalogs.ts
-│   │       ├── svelte_host_element.ts
+│   │       ├── svelte_host_element.svelte.ts
 │   │       └── to_web_component.ts
 │   ├── tests/                          # Vitest (jsdom) and Vitest browser mode
 │   └── a2ui_explorer/                  # SvelteKit gallery app and its end-to-end tests

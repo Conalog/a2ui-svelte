@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-import {getContext, setContext} from 'svelte';
+import {type Component, getContext, setContext} from 'svelte';
 import type {MarkdownRenderer} from '@a2ui/web_core';
 
 const MARKDOWN_KEY = Symbol('a2ui.markdown');
+export const MARKDOWN_COMPONENT_KEY = Symbol('a2ui.markdownComponent');
 
 /**
  * Gives the components below the caller a Markdown renderer: a function that
@@ -32,4 +33,33 @@ export function setMarkdownContext(renderer: MarkdownRenderer | undefined): void
 /** The Markdown renderer set above the caller with `setMarkdownContext`, if any. */
 export function getMarkdownContext(): MarkdownRenderer | undefined {
   return getContext<MarkdownRenderer | undefined>(MARKDOWN_KEY);
+}
+
+/** What the component given to `setMarkdownComponentContext` receives. */
+export interface MarkdownComponentProps {
+  /** The Markdown source to render, as the agent sent it. */
+  markdown: string;
+}
+
+/**
+ * Renders the Markdown of the basic catalog's `Text` with a Svelte component
+ * instead of a function that returns HTML. The component renders inside the
+ * application's Svelte tree, below the `A2uiSurface` that shows the `Text`, so
+ * it reads the application's context. When both this and `setMarkdownContext`
+ * are set, this one is used.
+ *
+ * The basic catalog's `Text` reads one Markdown renderer for the whole page, so
+ * set the component above every `A2uiSurface` on the page or above none: a
+ * surface without it shows no text for its Markdown while another surface has
+ * it.
+ */
+export function setMarkdownComponentContext(
+  component: Component<MarkdownComponentProps> | undefined,
+): void {
+  setContext(MARKDOWN_COMPONENT_KEY, component);
+}
+
+/** The Markdown component set above the caller with `setMarkdownComponentContext`, if any. */
+export function getMarkdownComponentContext(): Component<MarkdownComponentProps> | undefined {
+  return getContext<Component<MarkdownComponentProps> | undefined>(MARKDOWN_COMPONENT_KEY);
 }
