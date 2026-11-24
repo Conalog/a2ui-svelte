@@ -23,7 +23,8 @@
 
   For a Svelte implementation the element is a host, and its content renders
   as the element's children. A Web Component renders its own children; the
-  Svelte hosts it creates mount their content with the context captured here.
+  Svelte hosts it creates mount their content with the context captured here,
+  and report their errors back here.
 -->
 <script lang="ts">
   import {getAllContexts} from 'svelte';
@@ -36,7 +37,6 @@
   } from '@a2ui/web_core/universal';
   import {HostOwner, markSvelteRendered} from './host_registry.js';
   import NodeContent from './NodeContent.svelte';
-  import {getA2uiSurface, surfaceOf} from './node-view.svelte.js';
   import {
     isSvelteComponentImplementation,
     type SvelteCatalogComponent,
@@ -44,7 +44,17 @@
 
   let {node}: {node: ComponentNode<SvelteCatalogComponent>} = $props();
 
-  const owner = new HostOwner(getAllContexts(), getA2uiSurface());
+  // An error from Svelte content that a host below this element mounted itself
+  // is rethrown here, so the application's error boundaries see it as they see
+  // errors from content Svelte rendered directly.
+  let hostedError = $state.raw<{error: unknown}>();
+  $effect(() => {
+    if (hostedError) throw hostedError.error;
+  });
+
+  const owner = new HostOwner(getAllContexts(), error => {
+    hostedError = {error};
+  });
 
   const tagName = $derived(elementTagFor(node));
   const hostsSvelte = $derived(isSvelteComponentImplementation(node.impl));
@@ -67,7 +77,6 @@
 
   // Before `node`: a host decides whether to mount its own content when it gets one.
   const bindNode: Attachment<HTMLElement> = element => {
-    owner.surface ??= surfaceOf(node);
     markSvelteRendered(element, owner);
     (element as A2uiWebComponentElement).node = node;
   };

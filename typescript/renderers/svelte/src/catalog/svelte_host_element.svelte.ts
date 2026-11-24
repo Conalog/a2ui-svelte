@@ -18,7 +18,7 @@ import {mount, unmount} from 'svelte';
 import type {ComponentNode} from '@a2ui/web_core';
 import {type A2uiWebComponentElement, bindHostAccessibility} from '@a2ui/web_core/universal';
 import {type HostOwner, isSvelteRendered, ownerAbove} from '../host_registry.js';
-import NodeContent from '../NodeContent.svelte';
+import HostedContent from '../HostedContent.svelte';
 import type {SvelteCatalogComponent} from '../svelte_component_implementation.js';
 import {hostRefsOf} from './host_accessibility.js';
 
@@ -28,7 +28,7 @@ import {hostRefsOf} from './host_accessibility.js';
  * creates it, Svelte renders the node's content as its children. When another
  * renderer creates it (a Lit `Column` rendering its children), it mounts the
  * content itself, with the Svelte context of the nearest element above it
- * that Svelte rendered.
+ * that Svelte rendered, and hands errors from the content to that element.
  *
  * The host applies the node's `accessibility` attributes and validation
  * state itself, so every Svelte implementation gets them (see
@@ -47,7 +47,7 @@ const ElementBase: typeof HTMLElement =
 /** Content this host mounted itself, because Svelte did not render the host. */
 interface MountedContent {
   readonly instance: Record<string, unknown>;
-  readonly props: {node: ComponentNode<SvelteCatalogComponent>};
+  readonly props: {node: ComponentNode<SvelteCatalogComponent>; owner: HostOwner | null};
   readonly owner: HostOwner | null;
 }
 
@@ -96,12 +96,12 @@ export class SvelteWcHost extends ElementBase implements SvelteHostElement {
     }
     // A move under another owner remounts with that owner's context.
     this.unmountContent();
-    const props = $state({node});
-    this.content = {
-      instance: mount(NodeContent, {target: this, props, context: owner?.contexts}),
-      props,
-      owner,
-    };
+    const props = $state({node, owner});
+    // A copy, so a context the content sets never reaches the owner. Svelte reads
+    // contexts from a plain Map; it is not view state.
+    // eslint-disable-next-line svelte/prefer-svelte-reactivity
+    const context = new Map(owner?.contexts);
+    this.content = {instance: mount(HostedContent, {target: this, props, context}), props, owner};
   }
 
   private unmountContent() {

@@ -34,6 +34,7 @@ import BrokenParent from './fixtures/BrokenParent.svelte';
 import ContextReader from './fixtures/ContextReader.svelte';
 import CustomInput from './fixtures/CustomInput.svelte';
 import MetaProbe from './fixtures/MetaProbe.svelte';
+import Thrower from './fixtures/Thrower.svelte';
 import TrackedText from './fixtures/TrackedText.svelte';
 
 export const FIXTURE_CATALOG_ID = 'https://example.com/svelte_fixtures_v1_0.json';
@@ -66,6 +67,10 @@ export const fixtureImplementations = {
       metadata: {extensions: {catalog_hint: 'static-v1'}},
     },
     MetaProbe,
+  ),
+  Thrower: createComponentImplementation(
+    {name: 'Thrower', schema: z.object({label: CommonSchemas.DynamicString.optional()})},
+    Thrower,
   ),
   TrackedText: createComponentImplementation(
     {name: 'TrackedText', schema: z.object({text: CommonSchemas.DynamicString.optional()})},
