@@ -29,7 +29,7 @@
   import {basicCatalog} from '@a2ui/web_core/catalogs/basic/v1';
   import {A2uiSurface, type SvelteCatalogComponent} from '@conalog/a2ui-svelte';
 
-  import {readJsonLines} from '$lib/jsonl.js';
+  import {readJsonLines} from '#lib/jsonl.js';
 
   type Status = 'connecting' | 'idle' | 'failed';
 

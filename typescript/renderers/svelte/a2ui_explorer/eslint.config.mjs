@@ -18,7 +18,6 @@ import prettierConfig from 'eslint-config-prettier';
 import svelte from 'eslint-plugin-svelte';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
-import svelteConfig from './svelte.config.js';
 
 export default tseslint.config(
   ...tseslint.configs.recommended,
@@ -44,7 +43,6 @@ export default tseslint.config(
         projectService: true,
         extraFileExtensions: ['.svelte'],
         parser: tseslint.parser,
-        svelteConfig,
       },
     },
     rules: {
