@@ -19,14 +19,14 @@ The basic catalog itself is not reimplemented. As in the React, Lit and Angular 
 
 ## 2. Supported versions
 
-| Dependency       | Range                                                        |
-| ---------------- | ------------------------------------------------------------ |
-| A2UI protocol    | v1.0, plus v0.9 and v0.9.1 surfaces that `web_core` renders  |
-| `@a2ui/web_core` | `^0.16.1` (peer dependency)                                  |
-| `svelte`         | `^5.29.0` (peer dependency; `{@attach}` landed in 5.29)      |
-| `zod`            | `^3.25.76` (peer dependency, same as `@a2ui/web_core`)       |
-| SvelteKit        | 2 and 3, optional; the package imports nothing from `$app/*` |
-| Node.js (tools)  | `>=20.19`                                                    |
+| Dependency       | Range                                                                                           |
+| ---------------- | ----------------------------------------------------------------------------------------------- |
+| A2UI protocol    | v1.0, plus v0.9 and v0.9.1 surfaces that `web_core` renders                                     |
+| `@a2ui/web_core` | `^0.16.1` (peer dependency)                                                                     |
+| `svelte`         | `^5.29.0` (peer dependency; `{@attach}` landed in 5.29)                                         |
+| `zod`            | `^3.25.76` (peer dependency, same as `@a2ui/web_core`)                                          |
+| SvelteKit        | optional; the package imports nothing from `$app/*`. The explorer and its tests use SvelteKit 2 |
+| Node.js (tools)  | `>=20.19`                                                                                       |
 
 v0.8 is not supported; `web_core` keeps it under a separate legacy API.
 
@@ -57,8 +57,9 @@ a2ui-svelte/
 │   │       └── to_web_component.ts
 │   ├── tests/                          # Vitest (jsdom) and Vitest browser mode
 │   └── a2ui_explorer/                  # SvelteKit gallery app and its end-to-end tests
-├── conformance/                        # copied from the official repository (section 9)
-├── catalogs/basic/v1/                  # copied from the official repository (section 9)
+├── conformance/                        # copied from the official repository (section 12)
+├── catalogs/basic/                     # copied from the official repository (section 12)
+├── blueprints/                         # the codebase blueprint, in the official format
 └── docs/
 ```
 
@@ -200,7 +201,7 @@ A test imports the package in plain Node without a DOM. The explorer app is buil
 | ---------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Unit and adapter | Vitest with jsdom                              | `conformance/core/adapter_conformance.yaml`, `conformance/core/accessibility.yaml` (attribute checks), `conformance/adapter/adapter_conformance_v0_9.yaml`, `conformance/e2e` renderer half, package exports, import without a DOM, host and registry behavior. |
 | Browser          | Vitest browser mode with Playwright (Chromium) | The same conformance suites in a real browser, including the axe-core rules that jsdom cannot run, and input focus and caret retention.                                                                                                                         |
-| End to end       | Playwright against the built explorer          | Every example in `catalogs/basic/v1/examples` renders without errors in a SvelteKit build served by its server, and interactive examples respond to input.                                                                                                      |
+| End to end       | Playwright against the built explorer          | Every v1.0 and v0.9 basic catalog example renders without console errors in a SvelteKit build served by its Node server, and interactive examples respond to input.                                                                                             |
 | Package          | `svelte-check`, `publint`, ESLint, Prettier    | Types, the published package shape, lint rules and formatting.                                                                                                                                                                                                  |
 
 The conformance harness follows the React harness (`tests/adapter_harness.tsx` upstream): it reads the YAML suites, runs every step, checks every assertion field, and fails on an assertion key it does not know. Cases the renderer cannot support are listed with a reason, and the run fails if a listed case no longer exists.
@@ -225,4 +226,4 @@ The suites and example payloads are copied from the official repository at a pin
 8. (agent, unconfirmed) `@a2ui/web_core`, `svelte` and `zod` are peer dependencies (section 2).
 9. (agent, unconfirmed) No fallbacks until `web_core` supports them in every rendering path (section 13).
 10. (agent, unconfirmed) The workspace uses Yarn 4 through Corepack, as the official repository does.
-11. (agent, unconfirmed) Tooling targets Node.js 20.19 and later, so it runs on the development machine as installed. SvelteKit 3 declares Node.js 22.17; the explorer uses it if it runs on 20.19, and SvelteKit 2 otherwise.
+11. (agent, unconfirmed) Tooling targets Node.js 20.19 and later, so it runs on the development machine as installed. The explorer uses SvelteKit 2, because SvelteKit 3 needs Node.js 22 to build; CI runs Node.js 22 and 24. Moving the explorer to SvelteKit 3 is a small change once development machines run Node.js 22.
