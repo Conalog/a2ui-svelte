@@ -38,6 +38,7 @@ const VENDORED_PATHS = [
   'catalogs/basic/v1/catalog.json',
   'catalogs/basic/v1/examples',
   'catalogs/basic/v0_9/catalog.json',
+  'catalogs/basic/v0_9/examples',
   'catalogs/basic/v0_9_1/catalog.json',
 ];
 
