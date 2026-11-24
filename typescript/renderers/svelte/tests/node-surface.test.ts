@@ -21,6 +21,7 @@ import type {ComponentNode} from '@a2ui/web_core';
 import type {A2uiWebComponentElement} from '@a2ui/web_core/universal';
 
 import {A2uiSurface} from '../src/index.js';
+import {renderLog} from './fixtures/render_log.js';
 import {createFixtureSurface, findElement} from './utils.js';
 
 function nodeOf(element: Element | null): ComponentNode | undefined {
@@ -77,6 +78,20 @@ describe('A2uiSurface lifecycle', () => {
     await rerender({surface: second.surface});
     await waitFor(() => expect(getByTestId('context-reader').textContent).toBe('second'));
     expect(firstRoot?.disposed).toBe(true);
+  });
+
+  it('never renders the previous root under a new surface', async () => {
+    const first = createFixtureSurface([{id: 'root', component: 'TrackedText', text: 'first'}]);
+    const second = createFixtureSurface([{id: 'root', component: 'TrackedText', text: 'second'}]);
+
+    const {rerender, getByTestId} = render(A2uiSurface, {props: {surface: first.surface}});
+    await waitFor(() => expect(getByTestId('tracked-root').textContent).toBe('first'));
+    renderLog.length = 0;
+
+    await rerender({surface: second.surface});
+    await waitFor(() => expect(getByTestId('tracked-root').textContent).toBe('second'));
+    expect(renderLog.map(entry => entry.text)).toEqual(['second']);
+    renderLog.length = 0;
   });
 
   it('keeps Svelte content mounted when a universal container moves its host', async () => {
