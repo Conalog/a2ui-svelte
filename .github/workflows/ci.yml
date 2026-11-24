@@ -44,7 +44,7 @@ jobs:
 
   svelte:
     name: Package (Node ${{ matrix.node }})
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04 # Playwright has no Chromium build for Ubuntu 26.04 yet
     strategy:
       fail-fast: false
       matrix:
@@ -70,7 +70,7 @@ jobs:
 
   explorer:
     name: Explorer end to end
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04 # Playwright has no Chromium build for Ubuntu 26.04 yet
     defaults:
       run:
         working-directory: typescript/renderers/svelte/a2ui_explorer
