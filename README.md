@@ -73,6 +73,8 @@ The files under `conformance/` and `catalogs/` are copied unchanged from the off
 
 ## Run the explorer
 
+The explorer is a SvelteKit 3 app and needs Node.js 22.17 or later.
+
 ```sh
 corepack yarn install
 corepack yarn workspace @conalog/a2ui-svelte build

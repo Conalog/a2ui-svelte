@@ -4,7 +4,7 @@ Thank you for helping with the Svelte renderer for A2UI. This guide covers the d
 
 ## Development setup
 
-You need Node.js 20.19 or later (CI uses 22 and 24) and Corepack, which ships with Node.js. The repository uses Yarn 4 workspaces.
+You need Node.js 20.19 or later for the package and Node.js 22.17 or later for the explorer, which uses SvelteKit 3 (CI uses 22 and 24), and Corepack, which ships with Node.js. The repository uses Yarn 4 workspaces.
 
 ```sh
 corepack yarn install

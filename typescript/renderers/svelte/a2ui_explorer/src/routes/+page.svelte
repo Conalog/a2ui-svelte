@@ -23,8 +23,8 @@
   import {goto} from '$app/navigation';
   import {page} from '$app/state';
 
-  import {EXAMPLES, findExample, type ProtocolVersion} from '$lib/examples.js';
-  import {GallerySession} from '$lib/session.svelte.js';
+  import {EXAMPLES, findExample, type ProtocolVersion} from '#lib/examples.js';
+  import {GallerySession} from '#lib/session.svelte.js';
 
   const VERSIONS: readonly ProtocolVersion[] = ['v1.0', 'v0.9'];
   /** The basic catalog's default `--a2ui-color-primary`, shown until the user picks one. */
@@ -53,7 +53,7 @@
 
   function select(nextVersion: ProtocolVersion, id: string) {
     const params = new URLSearchParams({version: nextVersion, example: id});
-    void goto(`?${params}`, {replaceState: true, noScroll: true, keepFocus: true});
+    void goto(`?${params}`, {replace: true, reset: false});
   }
 
   function reset() {

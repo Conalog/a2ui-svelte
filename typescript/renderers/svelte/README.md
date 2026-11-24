@@ -223,7 +223,7 @@ const allowed = Object.fromEntries(
 | A2UI protocol    | v1.0, v0.9 and v0.9.1   |
 | `@a2ui/web_core` | `^0.16.1`               |
 | `svelte`         | `^5.29.0`               |
-| SvelteKit        | optional; tested with 2 |
+| SvelteKit        | optional; tested with 3 |
 
 v0.8 is not supported.
 

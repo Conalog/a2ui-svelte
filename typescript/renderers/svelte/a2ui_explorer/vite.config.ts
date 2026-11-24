@@ -14,11 +14,24 @@
  * limitations under the License.
  */
 
+import adapter from '@sveltejs/adapter-node';
 import {sveltekit} from '@sveltejs/kit/vite';
 import {defineConfig} from 'vite';
 
 export default defineConfig({
-  plugins: [sveltekit()],
+  plugins: [
+    sveltekit({
+      adapter: adapter(),
+      // The renderer evaluates nothing as code, so the explorer runs under a
+      // script policy without 'unsafe-eval' or inline scripts.
+      csp: {
+        mode: 'auto',
+        directives: {'script-src': ['self'], 'object-src': ['none'], 'base-uri': ['self']},
+      },
+      dynamicCompileOptions: ({filename}) =>
+        filename.includes('node_modules') ? undefined : {runes: true},
+    }),
+  ],
   server: {
     // The examples are read from catalogs/ at the repository root.
     fs: {allow: ['../../../..']},
