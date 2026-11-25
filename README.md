@@ -11,7 +11,7 @@ Protocol versions: v1.0 (Current), v0.9.1 and v0.9. v0.8 is not supported.
 
 ## Status
 
-The package is in development and not published yet. It follows the official [framework adapter blueprint](https://github.com/a2ui-project/a2ui/blob/main/blueprints/modules/a2ui_framework_adapter.blueprint.md) and passes the official renderer conformance suites:
+The package is published on npm as [`@conalog/a2ui-svelte`](https://www.npmjs.com/package/@conalog/a2ui-svelte). It is at 0.x, like `@a2ui/web_core`, so a minor release may change its API. It follows the official [framework adapter blueprint](https://github.com/a2ui-project/a2ui/blob/main/blueprints/modules/a2ui_framework_adapter.blueprint.md) and passes the official renderer conformance suites:
 
 | Suite                                                 | Result                                       |
 | ----------------------------------------------------- | -------------------------------------------- |
