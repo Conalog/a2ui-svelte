@@ -183,7 +183,7 @@ The renderer treats every agent message as untrusted.
 
 ## 10. Transport
 
-The package contains no transport code. The official renderers contain none either: the official client integration guide shows the application reading messages from its transport and passing them to `MessageProcessor.processMessagesAsync`, and sending actions back from the processor's action callback. The README shows the same for JSON Lines over `fetch` and for Server-Sent Events, in a few lines each. Over MCP, the application reads the `a2ui://` resource with its MCP client and passes the messages on the same way.
+The package contains no transport code. The official renderers contain none either: the official client integration guide shows the application reading messages from its transport and passing them to `MessageProcessor.processMessagesAsync`, and sending actions back from the processor's action callback. The package README points to that guide instead of adding transport code of its own. Over MCP, the application reads the `a2ui://` resource with its MCP client and passes the messages on the same way. The explorer's live agent page is an example of a JSON Lines transport in a SvelteKit app; it lives in the example app, not the package.
 
 ## 11. Server-side rendering
 
