@@ -83,6 +83,16 @@ corepack yarn workspace @conalog/a2ui-svelte-explorer dev
 
 The gallery shows every official basic catalog example, lets you step through its messages, and shows the data model and the actions the surface sends. The live agent page talks to a scripted agent over JSON Lines.
 
+## Differences from the official repository
+
+The package stays within what the official renderers do. Where it differs, the package README lists each difference and its reason under [Differences from the official renderers](typescript/renderers/svelte/README.md#differences-from-the-official-renderers).
+
+The explorer follows the official explorers (a gallery of the official examples with a message stepper, the data model and an event log), with three additions that the official explorers do not have:
+
+1. A live agent page that reads a scripted agent over JSON Lines from a SvelteKit endpoint and posts actions back, as an example of a transport in SvelteKit.
+2. Svelte versions of the `CustomGrid` and `CustomSlider` components the official `native-grid` example asks for, and one more example with a Svelte `StatusBadge` on v1.0.
+3. A script Content Security Policy without `'unsafe-eval'`, so the end-to-end tests check that the renderer runs under one.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
