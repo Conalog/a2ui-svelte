@@ -47,6 +47,10 @@ Then run every check, fix what the new cases find, and commit the copy and the f
 
 A case the renderer cannot support goes into `UNSUPPORTED` in `tests/adapter_harness.ts` with a reason. The run fails when an entry no longer matches a case, so the list stays current.
 
+## Staying within the official scope
+
+The package does what the official renderers do, in Svelte's form. Before you add something the official repository does not have, such as a public API, a README section of guidance, or an explorer feature, ask whether it is worth being different. If it is, list it with its reason under "Differences from the official renderers" in the package README, or, for the explorer, under "Differences from the official repository" in the root README. A change that removes a difference should remove its entry.
+
 ## Code style
 
 1. TypeScript follows the [Google TypeScript Style Guide](https://google.github.io/styleguide/tsguide.html), checked by `gts` through ESLint. Prettier formats TypeScript, Svelte, JSON, YAML and Markdown.
